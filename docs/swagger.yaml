@@ -1,0 +1,222 @@
+basePath: /
+definitions:
+  ds.Book:
+    properties:
+      Type:
+        type: string
+      color:
+        type: string
+      description:
+        type: string
+      name:
+        type: string
+      pokupatel:
+        type: string
+      Saleprice:
+        type: integer
+      Srokgodnost:
+        type: integer
+      uuid:
+        type: string
+      year:
+        type: integer
+    type: object
+  models.ModelBookCreated:
+    properties:
+      success:
+        description: success
+        type: boolean
+    type: object
+  models.ModelBookDeleted:
+    properties:
+      price:
+        type: boolean
+    type: object
+  models.ModelBookPrice:
+    properties:
+      description:
+        type: string
+      name:
+        type: string
+      price:
+        type: string
+    type: object
+  models.ModelError:
+    properties:
+      description:
+        description: description
+        type: string
+      error:
+        description: error
+        type: string
+      type:
+        description: type
+        type: string
+    type: object
+  models.ModelPriceChanged:
+    properties:
+      price:
+        type: boolean
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: sereja.noskin@yandex.ru
+    name: API Support
+    url: https://vk.com/id159001355
+  description: Showroom for japanese domestic market (JDM)
+  license:
+    name: AS IS (NO WARRANTY)
+  title: Book
+  version: "1.0"
+paths:
+  /books:
+    delete:
+      description: Delete a book via its uuid
+      parameters:
+      - description: UUID книги
+        in: query
+        name: UUID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ModelBookDeleted'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ModelError'
+      summary: Delete a book
+      tags:
+      - Change
+    get:
+      description: Get a list of all books
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ds.Book'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ModelError'
+      summary: Get all records
+      tags:
+      - Info
+    post:
+      description: Adding a new book to database
+      parameters:
+      - description: Название книги
+        in: query
+        name: Name
+        required: true
+        type: string
+      - description: Цена книги
+        in: query
+        name: Saleprice
+        required: true
+        type: integer
+      - description: Год производства
+        in: query
+        name: Year
+        required: true
+        type: integer
+      - description: Тип книги
+        in: query
+        name: Type
+        required: true
+        type: string
+      - description: Срок годности
+        in: query
+        name: Srokgodnost
+        required: true
+        type: integer
+      - description: Цвет книги
+        in: query
+        name: Color
+        required: true
+        type: string
+      - description: Покупатель
+        in: query
+        name: Pokupatel
+        required: true
+        type: string
+      - description: Описание
+        in: query
+        name: Description
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.ModelBookCreated'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ModelError'
+      summary: Add a new book
+      tags:
+      - Add
+  /books/:uuid:
+    get:
+      description: Get a price via uuid of a book
+      parameters:
+      - description: UUID книги
+        in: query
+        name: UUID
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ModelBookPrice'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ModelError'
+      summary: Get price for a book
+      tags:
+      - Info
+    put:
+      description: Change a price for a book via its uuid
+      parameters:
+      - description: UUID книги
+        in: query
+        name: UUID
+        required: true
+        type: string
+      - description: Новая цена
+        in: query
+        name: Price
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ModelPriceChanged'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ModelError'
+      summary: Change book price
+      tags:
+      - Change
+schemes:
+- https
+- http
+swagger: "2.0"
